@@ -13,6 +13,7 @@
   }
 }
 
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -34,5 +35,93 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+.shadow {
+  -webkit-box-shadow: 3px -1px 15px 0px rgba(0,0,0,0.33);
+  -moz-box-shadow: 3px -1px 15px 0px rgba(0,0,0,0.33);
+  box-shadow: 3px -1px 15px 0px rgba(0,0,0,0.33);
+}
+
+.add-wool {
+  width: 20vw;
+  border-radius: 10px;
+  padding: 20px;
+  margin-left: 30px;
+  margin-top: 20px;
+}
+
+.add-to-cart {
+  font-size: 25px;
+  padding-top: 15px;
+}
+
+.selection {
+  padding: 15px;
+}
+
+.title {
+  font-family: Tahoma, Geneva, sans-serif;
+  font-size: 60px;
+  left: 0;
+  text-align: start;
+  animation: rainbow-bg 4s linear;
+  animation-iteration-count: infinite;
+  padding: 10px;
+}
+
+.stock {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.item {
+  margin: 15px;
+}
+
+.item:hover {
+  -webkit-box-shadow: 3px -1px 15px 0px rgba(0,0,0,0.33);
+  -moz-box-shadow: 3px -1px 15px 0px rgba(0,0,0,0.33);
+  box-shadow: 3px -1px 15px 0px rgba(0,0,0,0.33);
+}
+
+@keyframes rainbow-bg{
+  100%,0%{
+    background-color: rgb(255,0,0);
+  }
+  8%{
+    background-color: rgb(255,127,0);
+  }
+  16%{
+    background-color: rgb(255,255,0);
+  }
+  25%{
+    background-color: rgb(127,255,0);
+  }
+  33%{
+    background-color: rgb(0,255,0);
+  }
+  41%{
+    background-color: rgb(0,255,127);
+  }
+  50%{
+    background-color: rgb(0,255,255);
+  }
+  58%{
+    background-color: rgb(0,127,255);
+  }
+  66%{
+    background-color: rgb(0,0,255);
+  }
+  75%{
+    background-color: rgb(127,0,255);
+  }
+  83%{
+    background-color: rgb(255,0,255);
+  }
+  91%{
+    background-color: rgb(255,0,127);
   }
 }
