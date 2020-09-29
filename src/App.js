@@ -3,6 +3,7 @@ import './App.css';
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
+import firebaseConfig from './firebaseConfig';
 
 const wool = {
   white: "white_wool",
@@ -21,17 +22,6 @@ const wool = {
   green: "green_wool",
   red: "red_wool",
   black: "black_wool",
-};
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBO2NoToNnXDQumKcmWWbesIhmavt6gX9U",
-  authDomain: "wool-it.firebaseapp.com",
-  databaseURL: "https://wool-it.firebaseio.com",
-  projectId: "wool-it",
-  storageBucket: "wool-it.appspot.com",
-  messagingSenderId: "266983846880",
-  appId: "1:266983846880:web:92681336d9dbf8a5ddf185",
-  measurementId: "G-L0W07SFXEC"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -55,6 +45,7 @@ function getOrdersList() {
 
 function OrdersComponent() {
   const [ orders, setOrders ] = useState([]); 
+
   useEffect(() => {
     const fetchOrders = async () => {
       const response = await getOrdersList().catch((err) => {
@@ -78,26 +69,48 @@ function OrdersComponent() {
     <div style={{ display: "flex", flexWrap: 'wrap' }}>
       {
         orders.map(({ id, data }) => {
+          const removeHandler = () => {
+            db.collection("orders").doc(id).delete().then(() => {
+              console.log("Borrado")
+            }).catch((err) => {
+              console.error(err);
+              alert('Error, orden no ha sido borrado')
+            })
+            for (let i = 0; i < orders.length; i += 1) {
+              if (orders[i].id === id) {
+                const newOrders = [...orders];
+                newOrders.splice(i, 1);
+                setOrders(newOrders);
+              }
+            }
+          }
+
           return (
-            <div className="shadow" style={{ 
-              borderRadius: '10px', 
-              width: '200px',
-              margin: '10px', 
-              padding: '10px',
-            }}>
+            <div 
+              className="shadow" 
+              style={{ 
+                borderRadius: '10px', 
+                width: '200px',
+                margin: '10px', 
+                padding: '10px',
+              }}
+              key={id}
+            >
               <div style={{ 
-              display: 'flex', 
-              justifyContent: 'flex-start', 
-            }}>
+                display: 'flex', 
+                justifyContent: 'flex-start', 
+                position: 'relative'
+                }}>
                 <span>{`${data.user}`}</span>
                 <div> - {new Date(data.date.seconds * 1000).toDateString()}</div>
+                <div className="delete" style={{ position: 'absolute', right: 0 }} onClick={removeHandler}>x</div>
               </div>
               <div style={{ paddingTop: '5px' }}>
               {
                   data.lana.map((element) => {
                     return (
                       <span key={element.wool}>
-                        <img src={require(`./img/${element.wool}.png`)} width={50} height={50}/>
+                        <img alt={element.wool} src={require(`./img/${element.wool}.png`)} width={40} height={40}/>
                         <span>{`x${element.amount}`}</span>
                       </span>
                     );
@@ -140,6 +153,7 @@ function App() {
   }
   
   const submitOrder = () => {
+    alert('Tu pedido ha sido registrado');
     addFirebase(woolCart, user);
   }
 
@@ -169,7 +183,7 @@ function App() {
             </select>
           </span>
         </div>
-        <img src={require(`./img/${selectedWool}.png`)} width={50} height={50}/>
+        <img alt={selectedWool} src={require(`./img/${selectedWool}.png`)} width={50} height={50}/>
         <div className="selection">
           <label htmlFor="number">Stacks: </label><input onChange={stacksHandler} value={stacks} type="number" id="number" name="stacks" min="1" />
         </div>
@@ -192,7 +206,7 @@ function App() {
               }
               return (
                 <span key={element.wool} className="item" onClick={removeHandler}>
-                  <img src={require(`./img/${element.wool}.png`)} width={50} height={50}/>
+                  <img alt={element.wool} src={require(`./img/${element.wool}.png`)} width={50} height={50}/>
                   <span>{`x${element.amount}`}</span>
                 </span>
               );
@@ -200,7 +214,7 @@ function App() {
           }
         </div>
         <div className="selection">
-          <label for="name">User: </label><input onChange={userHandler} value={user} type="text" id="user" name="user" placeholder="Sh1ft" />
+          <label htmlFor="name">User: </label><input onChange={userHandler} value={user} type="text" id="user" name="user" placeholder="Sh1ft" />
         </div>
         <button onClick={submitOrder} style={{ marginTop: "15px" }} disabled={total === 0}>Send</button>
       </div>

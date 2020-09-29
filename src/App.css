@@ -77,6 +77,15 @@
   justify-content: center;
 }
 
+.delete {
+  border-radius: 10px;
+ }
+ 
+ .delete:hover {
+   font-weight: bold;
+   cursor: default;
+ }
+
 .item {
   margin: 15px;
 }
